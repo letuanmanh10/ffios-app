@@ -1,0 +1,41 @@
+name: FFiOSApp
+options:
+  bundleIdPrefix: com.local
+  deploymentTarget:
+    iOS: "15.0"
+  xcodeVersion: "15.0"
+
+targets:
+  FFiOSApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "15.0"
+    sources:
+      - path: main.m
+    info:
+      path: Info.plist
+    settings:
+      base:
+        PRODUCT_NAME: FFiOSApp
+        PRODUCT_BUNDLE_IDENTIFIER: com.local.ffiosapp
+        INFOPLIST_FILE: Info.plist
+        TARGETED_DEVICE_FAMILY: "1,2"
+        IPHONEOS_DEPLOYMENT_TARGET: "15.0"
+        ENABLE_BITCODE: NO
+        CODE_SIGN_IDENTITY: ""
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGNING_ALLOWED: NO
+        AD_HOC_CODE_SIGNING_ALLOWED: YES
+        GCC_OPTIMIZATION_LEVEL: "s"
+        SWIFT_OPTIMIZATION_LEVEL: "-O"
+    dependencies:
+      - framework: Foundation.framework
+        sdk: Foundation.framework
+      - framework: UIKit.framework
+        sdk: UIKit.framework
+      - framework: CoreGraphics.framework
+        sdk: CoreGraphics.framework
+      - framework: QuartzCore.framework
+        sdk: QuartzCore.framework
+      - framework: CoreImage.framework
+        sdk: CoreImage.framework

@@ -1,0 +1,58 @@
+name: Build Unsigned iOS App
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode Project
+        run: |
+          cd iOSApp
+          xcodegen generate
+
+      - name: Build iOS App (.app)
+        run: |
+          cd iOSApp
+          xcodebuild -project FFiOSApp.xcodeproj \
+                     -scheme FFiOSApp \
+                     -configuration Release \
+                     -sdk iphoneos \
+                     -destination 'generic/platform=iOS' \
+                     CODE_SIGNING_ALLOWED=NO \
+                     CODE_SIGNING_REQUIRED=NO \
+                     CODE_SIGN_IDENTITY="" \
+                     SYMROOT=$(pwd)/build \
+                     build
+
+      - name: Package Unsigned .ipa
+        run: |
+          cd iOSApp
+          APP_PATH="build/Release-iphoneos/FFiOSApp.app"
+          if [ ! -d "$APP_PATH" ]; then
+            APP_PATH=$(find build -name "*.app" -type d | head -n 1)
+          fi
+          echo "Found app at: $APP_PATH"
+          mkdir -p Payload
+          cp -r "$APP_PATH" Payload/
+          zip -r FFiOSApp.ipa Payload
+          ls -lh FFiOSApp.ipa
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FFiOSApp-unsigned
+          path: iOSApp/FFiOSApp.ipa
+          retention-days: 14
