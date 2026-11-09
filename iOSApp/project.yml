@@ -27,7 +27,7 @@ targets:
         CODE_SIGNING_ALLOWED: NO
         AD_HOC_CODE_SIGNING_ALLOWED: YES
         GCC_OPTIMIZATION_LEVEL: "s"
-        SWIFT_OPTIMIZATION_LEVEL: "-O"
+        UILaunchStoryboardName: ""
     dependencies:
       - framework: Foundation.framework
         sdk: Foundation.framework
@@ -37,5 +37,9 @@ targets:
         sdk: CoreGraphics.framework
       - framework: QuartzCore.framework
         sdk: QuartzCore.framework
-      - framework: CoreImage.framework
-        sdk: CoreImage.framework
+
+schemes:
+  FFiOSApp:
+    build:
+      targets:
+        FFiOSApp: all
